@@ -28,7 +28,7 @@ Pd Music Player is an open-source multimedia player written in Python using PyQt
 To run the Pd Music Player locally, follow these steps:
 
 1. Clone the repository from GitHub:
-https://github.com/POLLARD1145/PdMusicPlayer.git
+https://github.com/POLLARD1145/media-player-in-python.git
 
 
 2. Change the directory to the project folder:
@@ -36,7 +36,7 @@ https://github.com/POLLARD1145/PdMusicPlayer.git
 3. Install the required dependencies:
    ```python
     pip install PyQt6 pygame moviepy numpy
-```
+    ```
 
 4. Run the application:
     mplayer.py
@@ -63,7 +63,7 @@ Once the Pd Music Player is running, you can use the following features:
 
 If you wish to contribute to Pd Music Player, please follow these steps:
 
-1. Fork the repository from [GitHub](https://github.com/POLLARD1145/PdMusicPlayer).
+1. Fork the repository from [GitHub](https://github.com/POLLARD1145/media-player-in-python).
 2. Create a new branch for your feature or bug fix.
 3. Make changes and commit them to your branch.
 4. Push your branch to your forked repository.
