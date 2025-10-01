@@ -1,0 +1,92 @@
+# Python Virtual Environments
+/.venv
+/env
+/venv
+.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Cache & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Application Logs
+*.log
+media_player.log
+
+# PyQt UI Files
+*.ui~
+*.qmlc
+*.jsc
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Test Coverage
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Distribution / Packaging
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Media Files (optional - uncomment if you don't want to track test media)
+# *.mp3
+# *.mp4
+# *.wav
+# *.avi
+# *.mkv
+# *.mov
