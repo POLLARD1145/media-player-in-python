@@ -40,7 +40,7 @@
 
 | File | Purpose | Read Time |
 |------|---------|-----------|
-| **INDEX.md** | This file - Navigation guide | 2 min |
+| **README.md** | This file - Navigation guide | 2 min |
 | **QUICK_START.md** | Fast start guide | 2 min |
 | **SUMMARY.md** | Complete overview | 5 min |
 | **README_OPTIMIZED.md** | Full user guide | 10 min |
@@ -48,7 +48,7 @@
 | **IMPROVEMENTS.md** | Technical details | 15 min |
 | **MIGRATION_GUIDE.md** | Migration help | 10 min |
 | **ARCHITECTURE.md** | System architecture | 20 min |
-| **README.md** | Original README | 5 min |
+| **README_OLD.md** | Original README | 5 min |
 
 ### 📝 Generated Files (Created at Runtime)
 
@@ -308,7 +308,7 @@ You now have:
 
 | File | Size | Topic | Priority |
 |------|------|-------|----------|
-| INDEX.md | This file | Navigation | ⭐ Start here |
+| README.md | This file | Navigation | ⭐ Start here |
 | QUICK_START.md | 3.5 KB | Quick start | ⭐⭐⭐ Must read |
 | SUMMARY.md | 8.8 KB | Overview | ⭐⭐⭐ Must read |
 | README_OPTIMIZED.md | 5.6 KB | User guide | ⭐⭐ Important |
@@ -322,7 +322,7 @@ You now have:
 ---
 
 **🎯 Recommended Reading Order:**
-1. This file (INDEX.md) - You're here! ✓
+1. This file (README.md) - You're here! ✓
 2. QUICK_START.md - Get running
 3. SUMMARY.md - Understand changes
 4. Explore the app
