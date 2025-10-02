@@ -1,8 +1,12 @@
 """
 Audio Controller Module
 Handles all audio playback functionality
+Uses pygame-ce (Community Edition) for better Python 3.12+ support
 """
-import pygame
+try:
+    import pygame_ce as pygame
+except ImportError:
+    import pygame  # Fallback to regular pygame if pygame-ce not installed
 import os
 from pathlib import Path
 import logging

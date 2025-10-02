@@ -2,6 +2,9 @@
 Pd Music Player - Optimized Version
 A modern, modular media player application
 
+Uses PySide6 (official Qt for Python), pygame-ce, and opencv-python
+All dependencies are self-contained with pre-built wheels
+
 DEVELOPER: POLLARD SAMBA
 GITHUB: POLLARD1145
 EMAIL: POLLADSAMBA1@GMAIL.COM
@@ -10,7 +13,7 @@ import sys
 import os
 import logging
 from pathlib import Path
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtWidgets
 
 from audio_controller import AudioController
 from media_manager import MediaManager
