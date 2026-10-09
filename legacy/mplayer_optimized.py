@@ -21,17 +21,21 @@ from audio_controller import AudioController
 from media_manager import MediaManager
 from video_player import VideoPlayer, parse_subtitles, find_subtitle_file
 
-# Configure logging
+# Configure logging - write to home dir because a .app launched from
+# Finder has '/' as its working directory, which isn't writable
+_log_handlers = [logging.StreamHandler()]
+try:
+    _log_handlers.append(logging.FileHandler(Path.home() / 'pd_player.log'))
+except OSError:
+    pass
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('media_player.log'),
-        logging.StreamHandler()
-    ]
+    handlers=_log_handlers
 )
 logger = logging.getLogger(__name__)
 
+APP_VERSION = "1.0.0"
 RECENT_FILE = Path.home() / ".pd_player_recent.json"
 MAX_RECENT = 15
 
@@ -1395,7 +1399,7 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
             "<p><b>Developer:</b> POLLARD SAMBA</p>"
             "<p><b>GitHub:</b> POLLARD1145</p>"
             "<p><b>Email:</b> POLLADSAMBA1@GMAIL.COM</p>"
-            "<p>Version 2.0 - Optimized Edition</p>"
+            f"<p>Version {APP_VERSION}</p>"
         )
 
 

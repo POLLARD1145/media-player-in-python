@@ -1,0 +1,9 @@
+2026-10-09 16:11:22,546 - audio_controller - INFO - AudioController initialized successfully
+2026-10-09 16:11:22,546 - media_manager - INFO - MediaManager initialized
+2026-10-09 16:11:22,567 - video_player - INFO - VideoPlayer initialized
+2026-10-09 16:11:22,713 - media_manager - INFO - Found 0 media files in /Users/pollard1145S/Music
+2026-10-09 16:11:22,714 - __main__ - INFO - Loaded default library: 0 songs
+2026-10-09 16:11:22,714 - __main__ - INFO - MediaPlayerUI initialized successfully
+2026-10-09 16:11:22,912 - __main__ - INFO - Application started successfully
+2026-10-09 16:11:32,449 - video_player - INFO - Video playback stopped
+2026-10-09 16:11:32,449 - audio_controller - INFO - Playback stopped

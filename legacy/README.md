@@ -1,331 +1,173 @@
-# 📑 Project Index & Documentation Guide
+# Pd Player (Legacy Python Edition)
 
-## 🚀 Quick Access
+A desktop media player for macOS and Windows built with PySide6 (Qt), pygame-ce,
+and Qt Multimedia.
 
-**Want to start using the app right now?**
-→ Read **[QUICK_START.md](QUICK_START.md)** (2 minutes)
+## Download
 
-**Want to understand what changed?**
-→ Read **[SUMMARY.md](SUMMARY.md)** (5 minutes)
+**macOS (Apple Silicon):**
+[PdPlayer-v1.0.0-macOS.dmg](https://github.com/POLLARD1145/media-player-in-python/releases/latest/download/PdPlayer-v1.0.0-macOS.dmg)
 
-**Want to see the transformation?**
-→ Read **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)** (10 minutes)
+Open the DMG, drag **Pd Player** onto **Applications**, then launch.
+First launch: right-click → Open (unsigned build). If macOS reports the app as
+"damaged", run `xattr -cr "/Applications/Pd Player.app"` in Terminal.
 
-## 📂 Project Files
+> **Note:** This is the legacy implementation. A cross-platform Flutter rewrite
+> (desktop + iOS) lives in the repository root.
 
-### 🎯 Core Application Files (Run These!)
+## Features
 
-| File | Description | Run Command |
-|------|-------------|-------------|
-| **mplayer_optimized.py** | ⭐ NEW optimized version | `python mplayer_optimized.py` |
-| **mplayer.py** | Original version (reference) | `python mplayer.py` |
-| **audio_controller.py** | Audio playback module | (imported by main) |
-| **media_manager.py** | File management module | (imported by main) |
-| **video_player.py** | Video playback module | (imported by main) |
+- **Audio playback** — MP3, WAV, OGG, FLAC, AAC, M4A (pygame-ce)
+- **Video playback** — MP4, MKV, AVI, MOV, WMV, FLV (Qt Multimedia / FFmpeg),
+  embedded in the main window with audio
+- **Seek bar** — click anywhere to jump, drag to scrub, works for video
+- **Repeat modes** — Off / Repeat All / Repeat One (auto-advances playlists)
+- **Fullscreen video** — floating auto-hiding control bar with seek, play/pause,
+  stop, and exit; tiny corner handle to restore
+- **Subtitles** — auto-loads `.srt`/`.vtt` files matching the video name,
+  embedded track selection for MKV/MP4, manual file loading
+- **Recent media** — remembers recent folders and files (Media → Recent Media),
+  persisted in `~/.pd_player_recent.json`
+- **Library browsing** — Music library, Video library, folder browsing, search
+- **Custom app icon** — bundled `.icns` in the macOS build
 
-### 📦 Configuration Files
+## Keyboard Shortcuts
 
-| File | Description | Command |
-|------|-------------|---------|
-| **requirements.txt** | Python dependencies | `pip install -r requirements.txt` |
-| **.gitignore** | Git ignore rules | (automatic) |
+| Key | Action |
+|-----|--------|
+| Space | Play / Pause |
+| S | Stop |
+| R | Cycle repeat mode (Off → All → One) |
+| F | Fullscreen (while video is showing) |
+| Esc | Exit fullscreen |
+| ← / → | Seek video -10s / +10s |
+| Double-click video | Toggle fullscreen |
 
-### 🧪 Testing Files
+## Run From Source
 
-| File | Description | Run Command |
-|------|-------------|-------------|
-| **test_modules.py** | Module verification tests | `python test_modules.py` |
+### Requirements
 
-### 📚 Documentation Files (You Are Here!)
+- Python 3.10+ (3.12 recommended — PySide6 6.12 needs it)
+- macOS or Windows
 
-| File | Purpose | Read Time |
-|------|---------|-----------|
-| **README.md** | This file - Navigation guide | 2 min |
-| **QUICK_START.md** | Fast start guide | 2 min |
-| **SUMMARY.md** | Complete overview | 5 min |
-| **README_OPTIMIZED.md** | Full user guide | 10 min |
-| **BEFORE_AND_AFTER.md** | Visual comparison | 10 min |
-| **IMPROVEMENTS.md** | Technical details | 15 min |
-| **MIGRATION_GUIDE.md** | Migration help | 10 min |
-| **ARCHITECTURE.md** | System architecture | 20 min |
-| **README_OLD.md** | Original README | 5 min |
+### macOS
 
-### 📝 Generated Files (Created at Runtime)
-
-| File | Description | View |
-|------|-------------|------|
-| **media_player.log** | Application logs | Text editor |
-
-## 📖 Reading Guide by Role
-
-### 👤 Just Want to Use It?
-1. **[QUICK_START.md](QUICK_START.md)** - Get started in 30 seconds
-2. **[README_OPTIMIZED.md](README_OPTIMIZED.md)** - Full user guide
-
-### 👨‍💼 Project Manager / Stakeholder?
-1. **[SUMMARY.md](SUMMARY.md)** - What was done
-2. **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)** - Visual improvements
-3. Performance metrics in **[IMPROVEMENTS.md](IMPROVEMENTS.md)**
-
-### 👨‍💻 Developer?
-1. **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design
-2. **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Technical changes
-3. **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Code examples
-4. Source code files (audio_controller.py, media_manager.py, etc.)
-
-### 🎓 Learning?
-1. **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)** - See the transformation
-2. **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Learn best practices
-3. **[ARCHITECTURE.md](ARCHITECTURE.md)** - Understand design patterns
-4. Compare `mplayer.py` vs `mplayer_optimized.py`
-
-### 🔄 Migrating from Original?
-1. **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Step-by-step guide
-2. **[SUMMARY.md](SUMMARY.md)** - What changed
-3. **[QUICK_START.md](QUICK_START.md)** - Fast setup
-
-## 🎯 Documentation by Topic
-
-### Installation & Setup
-- **[QUICK_START.md](QUICK_START.md)** - Installation steps
-- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Detailed setup
-- **requirements.txt** - Dependencies
-
-### Usage & Features
-- **[QUICK_START.md](QUICK_START.md)** - Basic usage
-- **[README_OPTIMIZED.md](README_OPTIMIZED.md)** - All features
-- **[SUMMARY.md](SUMMARY.md)** - Feature list
-
-### Performance & Optimization
-- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Performance metrics
-- **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)** - Comparisons
-- **[SUMMARY.md](SUMMARY.md)** - Quick stats
-
-### Architecture & Design
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Complete architecture
-- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Design patterns
-- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Code structure
-
-### Troubleshooting
-- **[QUICK_START.md](QUICK_START.md)** - Common issues
-- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Troubleshooting section
-- **media_player.log** - Debug information
-
-## 📊 Quick Facts
-
-### Project Statistics
-- **Lines of Code**: ~1,200 (split across 5 files)
-- **Documentation**: 7 comprehensive guides
-- **Performance Gain**: 50-66% faster startup
-- **Memory Reduction**: 47% less usage
-- **Quality Improvement**: 3x better maintainability
-
-### Files Created
-- ✅ 5 Python modules (including optimized main)
-- ✅ 1 requirements.txt
-- ✅ 1 test suite
-- ✅ 7 documentation files
-
-### Features Added
-- ✅ Search functionality
-- ✅ Modern UI theme
-- ✅ Keyboard shortcuts
-- ✅ Status bar
-- ✅ Logging system
-- ✅ Enhanced navigation
-- ✅ Error handling
-- ✅ And more!
-
-## 🎓 Learning Path
-
-### Beginner Path (30 minutes)
-1. Read **[QUICK_START.md](QUICK_START.md)** (2 min)
-2. Run `python mplayer_optimized.py` (1 min)
-3. Explore the app (10 min)
-4. Read **[SUMMARY.md](SUMMARY.md)** (5 min)
-5. Compare with original (12 min)
-
-### Intermediate Path (1 hour)
-1. Beginner path (30 min)
-2. Read **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)** (10 min)
-3. Read **[IMPROVEMENTS.md](IMPROVEMENTS.md)** (15 min)
-4. Read **[ARCHITECTURE.md](ARCHITECTURE.md)** (20 min)
-
-### Advanced Path (2 hours)
-1. Intermediate path (1 hour)
-2. Read all source code (30 min)
-3. Read **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** (10 min)
-4. Run tests and experiment (20 min)
-
-## 🔍 Find Information Fast
-
-### "How do I install it?"
-→ **[QUICK_START.md](QUICK_START.md)** - Installation section
-
-### "What improved?"
-→ **[SUMMARY.md](SUMMARY.md)** - What Was Done section
-
-### "How much faster is it?"
-→ **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Performance Improvements section
-
-### "How do I use feature X?"
-→ **[README_OPTIMIZED.md](README_OPTIMIZED.md)** - Usage section
-
-### "What's the architecture?"
-→ **[ARCHITECTURE.md](ARCHITECTURE.md)** - System Overview
-
-### "How do I add a feature?"
-→ **[ARCHITECTURE.md](ARCHITECTURE.md)** - Extension Points section
-
-### "What bugs were fixed?"
-→ **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Bugs Fixed section
-
-### "How do I migrate?"
-→ **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Complete guide
-
-### "Show me code examples"
-→ **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Code Examples section
-
-## 📋 Checklists
-
-### ✅ Getting Started Checklist
-- [ ] Read **[QUICK_START.md](QUICK_START.md)**
-- [ ] Install dependencies: `pip install -r requirements.txt`
-- [ ] Run tests: `python test_modules.py`
-- [ ] Start app: `python mplayer_optimized.py`
-- [ ] Explore features
-- [ ] Check logs: `media_player.log`
-
-### ✅ Understanding Checklist
-- [ ] Read **[SUMMARY.md](SUMMARY.md)**
-- [ ] Compare **[BEFORE_AND_AFTER.md](BEFORE_AND_AFTER.md)**
-- [ ] Review **[IMPROVEMENTS.md](IMPROVEMENTS.md)**
-- [ ] Study **[ARCHITECTURE.md](ARCHITECTURE.md)**
-
-### ✅ Development Checklist
-- [ ] Understand architecture from **[ARCHITECTURE.md](ARCHITECTURE.md)**
-- [ ] Review code in `mplayer_optimized.py`
-- [ ] Review modules: `audio_controller.py`, `media_manager.py`, `video_player.py`
-- [ ] Check **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** for examples
-- [ ] Run tests with `test_modules.py`
-
-## 🎯 Common Tasks
-
-### Task: Install and Run
 ```bash
+cd legacy
+
+# Easiest: uv (installs its own Python, no admin needed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -r requirements.txt
+
+# Or with system Python 3.12+
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
+
+# Run
+.venv/bin/python mplayer_optimized.py
+```
+
+### Windows
+
+```powershell
+cd legacy
+
+# Install Python 3.12 from python.org first, then:
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+# Run
 python mplayer_optimized.py
 ```
-📖 More: **[QUICK_START.md](QUICK_START.md)**
 
-### Task: Test Everything
+## Build a Standalone Executable
+
+### macOS (.app)
+
 ```bash
-python test_modules.py
-```
-📖 More: **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Testing section
+cd legacy
+.venv/bin/pip install pyinstaller   # or: uv pip install --python .venv/bin/python pyinstaller
 
-### Task: View Logs
-```bash
-# Windows
-type media_player.log
+# Generate the .icns icon (once)
+mkdir -p /tmp/pd.iconset
+for s in 16 32 64 128 256 512 1024; do
+  sips -z $s $s "../assets/images/logo/Pd Player Logo.png" --out "/tmp/pd.iconset/icon_${s}x${s}.png"
+done
+iconutil -c icns /tmp/pd.iconset -o /tmp/pd_player.icns
 
-# Linux/Mac
-cat media_player.log
-```
-📖 More: **[ARCHITECTURE.md](ARCHITECTURE.md)** - Logging section
+# Build
+.venv/bin/pyinstaller --noconfirm --windowed \
+  --name "Pd Player" \
+  --icon /tmp/pd_player.icns \
+  --add-data "../assets:assets" \
+  mplayer_optimized.py
 
-### Task: Add a Feature
-1. Read **[ARCHITECTURE.md](ARCHITECTURE.md)** - Extension Points
-2. Identify which module (audio/media/video/ui)
-3. Follow existing patterns
-4. Test with `test_modules.py`
+# Result: dist/Pd Player.app  (~146MB)
 
-## 🗺️ File Dependencies
+# Optional: package as a distributable DMG installer
+mkdir -p /tmp/pd_dmg
+cp -R "dist/Pd Player.app" /tmp/pd_dmg/
+ln -s /Applications /tmp/pd_dmg/Applications
+hdiutil create -volname "Pd Player" -srcfolder /tmp/pd_dmg -ov -format UDZO "dist/Pd Player.dmg"
 
-```
-mplayer_optimized.py
-    ├─→ audio_controller.py
-    │       └─→ pygame
-    │
-    ├─→ media_manager.py
-    │       └─→ os, pathlib
-    │
-    └─→ video_player.py
-            └─→ moviepy
+# Result: dist/Pd Player.dmg — users drag the app onto /Applications to install
 ```
 
-## 📞 Support & Contact
+First launch may require right-click → Open (unsigned app, Gatekeeper).
 
-### Need Help?
-1. Check **[QUICK_START.md](QUICK_START.md)** - Troubleshooting
-2. Check `media_player.log` file
-3. Run `python test_modules.py`
-4. Read **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Troubleshooting section
+### Windows (.exe)
 
-### Want to Contribute?
-1. Read **[ARCHITECTURE.md](ARCHITECTURE.md)**
-2. Understand design patterns
-3. Follow existing code style
-4. Test your changes
+PyInstaller does not cross-compile — run this **on a Windows machine**:
 
-### Contact
-- **Developer**: POLLARD SAMBA
-- **GitHub**: POLLARD1145
-- **Email**: POLLADSAMBA1@GMAIL.COM
+```powershell
+cd legacy
+pip install pyinstaller
 
-## 🏆 Achievement Summary
+pyinstaller --noconfirm --windowed `
+  --name "Pd Player" `
+  --icon "..\assets\images\logo\Pd Player Logo.ico" `
+  --add-data "..\assets;assets" `
+  mplayer_optimized.py
 
-You now have:
-- ✅ Professional-grade media player
-- ✅ Modern, beautiful interface
-- ✅ Modular, maintainable code
-- ✅ Comprehensive documentation
-- ✅ Test infrastructure
-- ✅ 3x better performance
-- ✅ Production-ready quality
+# Result: dist\Pd Player\Pd Player.exe
+```
 
-## 🎉 What's Next?
+(Convert the PNG logo to `.ico` first — e.g. with ImageMagick
+`magick "Pd Player Logo.png" -define icon:auto-resize "Pd Player Logo.ico"`.)
 
-### Immediate
-- [ ] Run the app
-- [ ] Explore features
-- [ ] Enjoy your music! 🎵
+## Project Structure
 
-### Short Term
-- [ ] Read documentation
-- [ ] Understand architecture
-- [ ] Try adding a feature
+```
+legacy/
+├── mplayer_optimized.py   # Main application (run this)
+├── mplayer.py             # Original version (reference only)
+├── audio_controller.py    # Audio playback (pygame-ce)
+├── video_player.py        # Video playback + subtitle parsing (Qt Multimedia)
+├── media_manager.py       # File discovery / library scanning
+├── requirements.txt       # Dependencies
+└── test_modules.py        # Module smoke tests
 
-### Long Term
-- [ ] Add unit tests
-- [ ] Add new features
-- [ ] Share with others
-- [ ] Push to GitHub
+assets/images/logo/        # App icon (PNG + SVG)
+```
 
----
+## Files the App Writes
 
-## 📚 Documentation Files Summary
+- `media_player.log` — runtime log (working directory)
+- `~/.pd_player_recent.json` — recent media list
 
-| File | Size | Topic | Priority |
-|------|------|-------|----------|
-| README.md | This file | Navigation | ⭐ Start here |
-| QUICK_START.md | 3.5 KB | Quick start | ⭐⭐⭐ Must read |
-| SUMMARY.md | 8.8 KB | Overview | ⭐⭐⭐ Must read |
-| README_OPTIMIZED.md | 5.6 KB | User guide | ⭐⭐ Important |
-| BEFORE_AND_AFTER.md | 15 KB | Comparison | ⭐⭐ Important |
-| IMPROVEMENTS.md | 8 KB | Technical | ⭐ Optional |
-| MIGRATION_GUIDE.md | 8.4 KB | Migration | ⭐ Optional |
-| ARCHITECTURE.md | 18 KB | Architecture | ⭐ Optional |
+## Troubleshooting
 
-**Total Documentation**: ~77 KB of comprehensive guides!
+| Problem | Fix |
+|---------|-----|
+| `No module named 'PySide6'` | Activate the venv first |
+| Video has no sound | Use `mplayer_optimized.py` — the original `mplayer.py`/old code used OpenCV which cannot decode audio |
+| Subtitles not showing | Ensure the `.srt` has the same filename as the video, or use Playback → Subtitles → Load Subtitle File |
+| App won't open on macOS | Right-click → Open (unsigned build) |
+| Something else | Check `media_player.log` |
 
----
+## Developer
 
-**🎯 Recommended Reading Order:**
-1. This file (README.md) - You're here! ✓
-2. QUICK_START.md - Get running
-3. SUMMARY.md - Understand changes
-4. Explore the app
-5. Other docs as needed
-
-**Happy coding! 🎵🚀**
+**POLLARD SAMBA** — POLLADSAMBA1@GMAIL.COM — GitHub: POLLARD1145
