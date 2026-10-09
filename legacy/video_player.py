@@ -4,6 +4,7 @@ Handles video playback functionality using Qt Multimedia (QMediaPlayer)
 Audio and video play together, embedded inside the main window
 """
 import os
+import re
 from pathlib import Path
 import logging
 
@@ -99,6 +100,21 @@ class VideoPlayer(QtCore.QObject):
         """Set volume (0.0 to 1.0)"""
         self.audio_output.setVolume(max(0.0, min(1.0, value)))
 
+    def subtitle_tracks(self):
+        """Get embedded subtitle tracks as a list of dicts"""
+        try:
+            return self.media_player.subtitleTracks()
+        except Exception as e:
+            logger.error(f"Error getting subtitle tracks: {e}")
+            return []
+
+    def set_subtitle_track(self, index: int):
+        """Activate an embedded subtitle track (-1 disables)"""
+        try:
+            self.media_player.setActiveSubtitleTrack(index)
+        except Exception as e:
+            logger.error(f"Error setting subtitle track: {e}")
+
     @property
     def current_video(self):
         """Get the current video filepath"""
@@ -108,3 +124,56 @@ class VideoPlayer(QtCore.QObject):
     def is_playing(self):
         """Check if video is currently playing"""
         return self.media_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState
+
+
+def _timestamp_to_ms(ts: str) -> int:
+    """Convert 'HH:MM:SS,mmm' or 'HH:MM:SS.mmm' to milliseconds"""
+    ts = ts.replace(',', '.')
+    h, m, rest = ts.split(':')
+    s, ms = rest.split('.')
+    return (int(h) * 3600 + int(m) * 60 + int(s)) * 1000 + int(ms)
+
+
+def parse_subtitles(filepath: str):
+    """
+    Parse an .srt or .vtt subtitle file.
+
+    Returns:
+        List of (start_ms, end_ms, text) tuples, or [] on failure
+    """
+    try:
+        text = Path(filepath).read_text(encoding='utf-8', errors='replace')
+        cues = []
+        timestamp_re = re.compile(
+            r'(\d{2}:\d{2}:\d{2}[,.]\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}[,.]\d{3})'
+        )
+        for block in re.split(r'\n\s*\n', text):
+            lines = [l for l in block.strip().splitlines() if l.strip()]
+            for i, line in enumerate(lines):
+                match = timestamp_re.search(line)
+                if match:
+                    cue_text = ' '.join(lines[i + 1:])
+                    cue_text = re.sub(r'<[^>]+>', '', cue_text).strip()
+                    if cue_text:
+                        cues.append((
+                            _timestamp_to_ms(match.group(1)),
+                            _timestamp_to_ms(match.group(2)),
+                            cue_text
+                        ))
+                    break
+        cues.sort(key=lambda c: c[0])
+        logger.info(f"Parsed {len(cues)} subtitle cues from {filepath}")
+        return cues
+    except Exception as e:
+        logger.error(f"Error parsing subtitle file {filepath}: {e}")
+        return []
+
+
+def find_subtitle_file(video_path: str):
+    """Look for a .srt/.vtt file matching the video's filename"""
+    stem = Path(video_path).with_suffix('')
+    for ext in ('.srt', '.vtt'):
+        candidate = str(stem) + ext
+        if os.path.exists(candidate):
+            return candidate
+    return None
