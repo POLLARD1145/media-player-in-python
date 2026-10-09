@@ -1,4 +1,5 @@
 # Pd Player (Legacy Python Edition)
+![v1.0.0 MacOS UI](/assets/images/screenshots/v1.0.0-macOS.png)
 
 A desktop media player for macOS and Windows built with PySide6 (Qt), pygame-ce,
 and Qt Multimedia.
