@@ -6,7 +6,7 @@ and Qt Multimedia.
 ## Download
 
 **macOS (Apple Silicon):**
-[PdPlayer-v1.0.0-macOS.dmg](https://github.com/POLLARD1145/media-player-in-python/releases/latest/download/PdPlayer-v1.0.0-macOS.dmg)
+[PdPlayer-v1.0.0-macOS-arm64.dmg](https://github.com/POLLARD1145/media-player-in-python/releases/latest/download/PdPlayer-v1.0.0-macOS-arm64.dmg)
 
 Open the DMG, drag **Pd Player** onto **Applications**, then launch.
 First launch: right-click → Open (unsigned build). If macOS reports the app as
@@ -83,6 +83,20 @@ pip install -r requirements.txt
 python mplayer_optimized.py
 ```
 
+## Release File Naming
+
+All release assets follow `PdPlayer-v<version>-<os>-<arch>.<ext>` so users can
+identify the right download at a glance:
+
+| Platform | Format | Example |
+|----------|--------|---------|
+| Windows | `PdPlayer-v1.0.0-windows-x64.exe` (portable) or `.msi` (installer) | |
+| macOS | `PdPlayer-v1.0.0-macOS-arm64.dmg` (Apple Silicon) / `-x64` (Intel) | |
+| Linux | `PdPlayer-v1.0.0-linux-amd64.tar.gz` | |
+
+Version comes from `APP_VERSION` in `mplayer_optimized.py` — bump it there,
+stamp the bundle (below), then name the DMG/installer to match the git tag.
+
 ## Build a Standalone Executable
 
 ### macOS (.app)
@@ -111,14 +125,21 @@ iconutil -c icns /tmp/pd.iconset -o /tmp/pd_player.icns
 mkdir -p /tmp/pd_dmg
 cp -R "dist/Pd Player.app" /tmp/pd_dmg/
 ln -s /Applications /tmp/pd_dmg/Applications
-hdiutil create -volname "Pd Player" -srcfolder /tmp/pd_dmg -ov -format UDZO "dist/Pd Player.dmg"
+hdiutil create -volname "Pd Player" -srcfolder /tmp/pd_dmg -ov -format UDZO "dist/PdPlayer-v1.0.0-macOS-arm64.dmg"
 
-# Result: dist/Pd Player.dmg — users drag the app onto /Applications to install
+# Result: dist/PdPlayer-v1.0.0-macOS-arm64.dmg — users drag the app onto /Applications to install
+```
+
+After building, stamp the bundle version (PyInstaller defaults it to 0.0.0):
+
+```bash
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString 1.0.0" \
+  -c "Set :CFBundleVersion 1.0.0" "dist/Pd Player.app/Contents/Info.plist"
 ```
 
 First launch may require right-click → Open (unsigned app, Gatekeeper).
 
-### Windows (.exe)
+### Windows (.exe / installer)
 
 PyInstaller does not cross-compile — run this **on a Windows machine**:
 
@@ -126,17 +147,31 @@ PyInstaller does not cross-compile — run this **on a Windows machine**:
 cd legacy
 pip install pyinstaller
 
-pyinstaller --noconfirm --windowed `
-  --name "Pd Player" `
-  --icon "..\assets\images\logo\Pd Player Logo.ico" `
+# Portable single-file exe
+pyinstaller --noconfirm --windowed --onefile `
+  --name "PdPlayer" `
+  --icon "..\assets\images\logo\PdPlayer.ico" `
   --add-data "..\assets;assets" `
   mplayer_optimized.py
 
-# Result: dist\Pd Player\Pd Player.exe
+# Result: dist\PdPlayer.exe → rename to PdPlayer-v1.0.0-windows-x64.exe
 ```
 
-(Convert the PNG logo to `.ico` first — e.g. with ImageMagick
-`magick "Pd Player Logo.png" -define icon:auto-resize "Pd Player Logo.ico"`.)
+Convert the PNG logo to `.ico` first — e.g. with ImageMagick
+`magick "Pd Player Logo.png" -define icon:auto-resize "PdPlayer.ico"`.
+
+For a real installer (Start Menu entry, uninstaller, install dir choice),
+build the folder version (`--onedir`, the default without `--onefile`) and wrap
+it with [Inno Setup](https://jrsoftware.org/isinfo.php) (free) or WiX:
+
+```powershell
+pyinstaller --noconfirm --windowed `
+  --name "Pd Player" `
+  --icon "..\assets\images\logo\PdPlayer.ico" `
+  --add-data "..\assets;assets" `
+  mplayer_optimized.py
+# Point Inno Setup at dist\Pd Player\ → produces PdPlayer-v1.0.0-windows-x64-setup.exe
+```
 
 ## Project Structure
 
