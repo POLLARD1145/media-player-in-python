@@ -46,10 +46,20 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
         # State variables
         self.current_playlist = []
         self.is_playing = False
+        self.is_video_mode = False
         
         # Setup UI
         self.setup_ui()
         self.apply_modern_stylesheet()
+        
+        # Wire up video player signals
+        self.video_player.playback_finished.connect(self.show_playlist)
+        self.video_player.error_occurred.connect(
+            lambda msg: self.statusbar.showMessage(f"Video error: {msg}")
+        )
+        self.video_player.media_player.positionChanged.connect(self._on_video_position)
+        self.video_player.media_player.durationChanged.connect(self._on_video_duration)
+        self.progress_slider.sliderMoved.connect(self._on_seek)
         
         # Load initial playlist
         self.load_default_library()
@@ -182,7 +192,25 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
         self.playlist_view.setObjectName("PlaylistView")
         self.playlist_view.itemClicked.connect(self.on_song_clicked)
         self.playlist_view.itemDoubleClicked.connect(self.on_song_double_clicked)
-        layout.addWidget(self.playlist_view)
+
+        # Stacked widget: page 0 = playlist, page 1 = embedded video
+        self.content_stack = QtWidgets.QStackedWidget()
+        self.content_stack.addWidget(self.playlist_view)
+
+        video_page = QtWidgets.QWidget()
+        video_layout = QtWidgets.QVBoxLayout(video_page)
+        video_layout.setContentsMargins(0, 0, 0, 0)
+        video_layout.setSpacing(5)
+        self.video_player.video_widget.setMinimumHeight(300)
+        video_layout.addWidget(self.video_player.video_widget)
+
+        self.btn_back_to_playlist = QtWidgets.QPushButton("← Back to Playlist")
+        self.btn_back_to_playlist.setObjectName("SearchButton")
+        self.btn_back_to_playlist.clicked.connect(self.show_playlist)
+        video_layout.addWidget(self.btn_back_to_playlist)
+
+        self.content_stack.addWidget(video_page)
+        layout.addWidget(self.content_stack)
         
         # Now playing info
         self.now_playing_label = QtWidgets.QLabel("No media loaded")
@@ -584,6 +612,9 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
             song_path = self.media_manager.get_file_path(song_name)
             
             if self.media_manager.is_audio_file(song_name):
+                if self.is_video_mode:
+                    self.video_player.stop()
+                    self.show_playlist()
                 if self.audio_controller.load(song_path):
                     if self.audio_controller.play():
                         self.now_playing_label.setText(f"Now Playing: {song_name}")
@@ -592,9 +623,14 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
                         self.is_playing = True
                         
             elif self.media_manager.is_video_file(song_name):
-                self.now_playing_label.setText(f"Playing video: {song_name}")
-                self.statusbar.showMessage(f"Playing video: {song_name}")
-                self.video_player.play_video(song_path)
+                self.audio_controller.stop()
+                if self.video_player.play_video(song_path):
+                    self.now_playing_label.setText(f"Playing video: {song_name}")
+                    self.statusbar.showMessage(f"Playing video: {song_name}")
+                    self.content_stack.setCurrentIndex(1)
+                    self.is_video_mode = True
+                    self.is_playing = True
+                    self.btn_play.setText("⏸")
                 
         except Exception as e:
             logger.error(f"Error playing media: {e}")
@@ -603,6 +639,19 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
     def on_play_pause(self):
         """Handle play/pause button click"""
         try:
+            if self.is_video_mode:
+                if self.is_playing:
+                    self.video_player.pause()
+                    self.btn_play.setText("▶")
+                    self.is_playing = False
+                    self.statusbar.showMessage("Paused")
+                else:
+                    self.video_player.resume()
+                    self.btn_play.setText("⏸")
+                    self.is_playing = True
+                    self.statusbar.showMessage("Playing")
+                return
+
             if not self.is_playing:
                 # Play
                 if self.audio_controller.play():
@@ -622,12 +671,45 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
     def on_stop(self):
         """Handle stop button click"""
         try:
-            self.audio_controller.stop()
+            if self.is_video_mode:
+                self.video_player.stop()
+            else:
+                self.audio_controller.stop()
             self.btn_play.setText("▶")
             self.is_playing = False
             self.statusbar.showMessage("Stopped")
         except Exception as e:
             logger.error(f"Error stopping playback: {e}")
+    
+    def show_playlist(self):
+        """Switch back from video view to playlist view"""
+        self.content_stack.setCurrentIndex(0)
+        self.is_video_mode = False
+        self.progress_slider.setValue(0)
+        self.time_start.setText("00:00")
+        self.time_end.setText("00:00")
+    
+    def _on_video_position(self, position_ms):
+        """Update progress slider as the video plays"""
+        if not self.progress_slider.isSliderDown():
+            self.progress_slider.setValue(position_ms)
+        self.time_start.setText(self._format_time(position_ms))
+    
+    def _on_video_duration(self, duration_ms):
+        """Set slider range when the video duration is known"""
+        self.progress_slider.setRange(0, max(0, duration_ms))
+        self.time_end.setText(self._format_time(duration_ms))
+    
+    def _on_seek(self, position_ms):
+        """Seek video when the user drags the progress slider"""
+        if self.is_video_mode:
+            self.video_player.media_player.setPosition(position_ms)
+    
+    @staticmethod
+    def _format_time(ms):
+        """Format milliseconds as MM:SS"""
+        seconds = max(0, int(ms / 1000))
+        return f"{seconds // 60:02d}:{seconds % 60:02d}"
     
     def on_next(self):
         """Handle next button click"""
@@ -656,6 +738,7 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
         try:
             volume = value / 100.0
             self.audio_controller.volume = volume
+            self.video_player.set_volume(volume)
             self.volume_label.setText(f"{value}%")
         except Exception as e:
             logger.error(f"Error changing volume: {e}")
@@ -698,6 +781,12 @@ class MediaPlayerUI(QtWidgets.QMainWindow):
         except Exception as e:
             logger.error(f"Error searching: {e}")
             self.statusbar.showMessage("Error searching")
+    
+    def closeEvent(self, event):
+        """Stop all playback when the window closes"""
+        self.video_player.stop()
+        self.audio_controller.stop()
+        super().closeEvent(event)
     
     def show_about(self):
         """Show about dialog"""
